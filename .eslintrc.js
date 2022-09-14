@@ -17,5 +17,7 @@ module.exports = {
     'no-console': 'off',
     'object-curly-newline': 'off',
     'prefer-arrow-callback': 'off',
+    'comma-dangle': 'off',
+    'max-len': 120,
   },
 };
