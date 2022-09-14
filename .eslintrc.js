@@ -16,5 +16,6 @@ module.exports = {
     'no-plusplus': 'off',
     'no-console': 'off',
     'object-curly-newline': 'off',
+    'prefer-arrow-callback': 'off',
   },
 };
