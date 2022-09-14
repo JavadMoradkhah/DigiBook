@@ -15,5 +15,6 @@ module.exports = {
     'no-dupe-keys': 'error',
     'no-plusplus': 'off',
     'no-console': 'off',
+    'object-curly-newline': 'off',
   },
 };
