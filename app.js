@@ -19,6 +19,8 @@ app.use(express.json());
 
 app.use('/api/', homeRoute);
 
+database.sync();
+
 app.listen(port, () => {
   console.log(`Server is running: http://localhost:${port}/api/`);
 });
