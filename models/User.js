@@ -22,6 +22,10 @@ const User = database.define(
       type: DataTypes.STRING(50),
       allowNull: false,
     },
+    password: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
   },
   { indexes: [{ unique: true, fields: ['email'] }] }
 );
