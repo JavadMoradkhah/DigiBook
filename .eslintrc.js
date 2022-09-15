@@ -19,6 +19,7 @@ module.exports = {
     'prefer-arrow-callback': 'off',
     'comma-dangle': 'off',
     'consistent-return': 'off',
+    camelcase: 'off',
     'no-unused-vars': ['error', { argsIgnorePattern: 'req|res|next|val|err' }],
   },
 };
