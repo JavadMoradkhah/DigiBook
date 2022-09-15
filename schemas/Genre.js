@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const GenreSchema = Joi.object({
-  genreName: Joi.string()
+  genre_name: Joi.string()
     .pattern(/^[A-Z|a-z]+$/)
     .min(3)
     .max(50)
