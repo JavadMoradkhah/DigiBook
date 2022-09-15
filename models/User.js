@@ -4,7 +4,7 @@ const database = require('../startup/database');
 const User = database.define(
   'User',
   {
-    id: {
+    userId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
@@ -23,7 +23,7 @@ const User = database.define(
       allowNull: false,
     },
     password: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(1000),
       allowNull: false,
     },
   },
