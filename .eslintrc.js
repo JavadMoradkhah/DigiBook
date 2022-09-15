@@ -18,6 +18,7 @@ module.exports = {
     'object-curly-newline': 'off',
     'prefer-arrow-callback': 'off',
     'comma-dangle': 'off',
-    'max-len': 120,
+    'consistent-return': 'off',
+    'no-unused-vars': ['error', { argsIgnorePattern: 'req|res|next|val|err' }],
   },
 };
