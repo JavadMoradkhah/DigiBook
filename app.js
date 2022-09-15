@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const homeRoute = require('./routes/home');
 const authRoutes = require('./routes/auth');
+const genreRoutes = require('./routes/genres');
 const database = require('./startup/database');
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 
 app.use('/api/', homeRoute);
 app.use('/api/auth', authRoutes);
+app.use('/api/genres', genreRoutes);
 
 database.sync();
 
