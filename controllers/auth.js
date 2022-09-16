@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const AppError = require('../utils/AppError');
 const User = require('../models/User');
 const { UserSchema, LoginSchema } = require('../schemas/User');
 
@@ -13,7 +14,7 @@ exports.register = async (req, res, next) => {
   try {
     const validation = UserSchema.validate(req.body);
     if (validation.error) {
-      return res.status(400).json({ status: 'fail', message: validation.error.message });
+      return next(new AppError(400, 'fail', validation.error.message));
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -37,18 +38,18 @@ exports.login = async (req, res, next) => {
   try {
     const validation = LoginSchema.validate(req.body);
     if (validation.error) {
-      return res.status(400).json({ status: 'fail', message: validation.error.message });
+      return next(new AppError(400, 'fail', validation.error.message));
     }
 
     const user = await User.findOne({ where: { email: req.body.email }, raw: true });
 
     if (!user) {
-      return res.status(400).json({ status: 'fail', message: 'The email or password is invalid!' });
+      return next(new AppError(400, 'fail', 'The email or password is invalid!'));
     }
 
     const passwordMatch = await bcrypt.compare(req.body.password, user.password);
     if (!passwordMatch) {
-      return res.status(400).json({ status: 'fail', message: 'The email or password is invalid!' });
+      return next(new AppError(400, 'fail', 'The email or password is invalid!'));
     }
 
     delete user.password;

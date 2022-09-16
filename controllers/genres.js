@@ -1,4 +1,4 @@
-// const { ValidationError } = require('sequelize');
+const AppError = require('../utils/AppError');
 const Genre = require('../models/Genre');
 const { GenreSchema } = require('../schemas/Genre');
 
@@ -9,7 +9,7 @@ exports.findGenre = async (req, res, next) => {
     const genre = await Genre.findByPk(id);
 
     if (!genre) {
-      return res.status(404).json({ status: 'fail', message: 'The genre not found with the given id!' });
+      return next(new AppError(404, 'fail', 'The genre not found with the given id!'));
     }
 
     req.genre = genre;
@@ -42,7 +42,7 @@ exports.createGenre = async (req, res, next) => {
   try {
     const validation = GenreSchema.validate(req.body);
     if (validation.error) {
-      return res.status(400).json({ status: 'fail', message: validation.error.message });
+      return next(new AppError(400, 'fail', validation.error.message));
     }
 
     const genre = await Genre.create(req.body);
@@ -57,7 +57,7 @@ exports.updateGenre = async (req, res, next) => {
   try {
     const validation = GenreSchema.validate(req.body);
     if (validation.error) {
-      return res.status(400).json({ status: 'fail', message: validation.error.message });
+      return next(new AppError(400, 'fail', validation.error.message));
     }
 
     let { genre } = req;

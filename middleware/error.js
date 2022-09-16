@@ -1,13 +1,17 @@
-const { ValidationError } = require('sequelize');
+const AppError = require('../utils/AppError');
 
 module.exports = (err, req, res, next) => {
-  console.log(err);
-
-  if (err instanceof ValidationError) {
-    return res.status(400).json({ status: 'fail', message: err.parent.sqlMessage });
+  if (process.env.NODE_ENV === 'development') {
+    console.log(err);
   }
 
-  return res
-    .status(500)
-    .json({ status: 'error', message: 'Something went wrong: Please try again later.' });
+  const defaultErrorMessage = 'Something went wrong: Please try again later.';
+
+  if (err instanceof AppError) {
+    return res
+      .status(err.statusCode)
+      .json({ status: err.status, message: err.message || defaultErrorMessage });
+  }
+
+  res.status(500).json({ status: 'error', message: defaultErrorMessage });
 };

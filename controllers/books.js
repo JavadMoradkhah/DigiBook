@@ -1,4 +1,4 @@
-// const { ValidationError } = require('sequelize');
+const AppError = require('../utils/AppError');
 const Book = require('../models/Book');
 const Genre = require('../models/Genre');
 const { BookUpdateSchema } = require('../schemas/Book');
@@ -13,9 +13,7 @@ exports.findBook = async (req, res, next) => {
     const book = await Book.findByPk(id);
 
     if (!book) {
-      return res
-        .status(404)
-        .json({ status: 'fail', message: 'The book not found with the given id!' });
+      return next(new AppError(404, 'fail', 'The book not found with the given id.'));
     }
 
     req.book = book;
@@ -47,14 +45,10 @@ exports.getBookById = async (req, res, next) => {
 exports.createBook = async (req, res, next) => {
   try {
     if (!req.file) {
-      return res
-        .status(400)
-        .json({ status: 'fail', message: 'Please upload the book thumbnail image.' });
+      return next(new AppError(400, 'fail', 'Please upload the book thumbnail image.'));
     }
 
     req.body.thumbnail_image = `uploads/${req.file.filename}`;
-
-    console.log('thumbnail_image:', req.body.thumbnail_image);
 
     const book = await Book.create(req.body);
 
@@ -68,7 +62,7 @@ exports.updateBook = async (req, res, next) => {
   try {
     const validation = BookUpdateSchema.validate(req.body);
     if (validation.error) {
-      return res.status(400).json({ status: 'fail', message: validation.error.message });
+      return next(new AppError(400, 'fail', validation.error.message));
     }
 
     let { book } = req;
@@ -76,7 +70,7 @@ exports.updateBook = async (req, res, next) => {
     if (req.body.genre_id) {
       const genre = await Genre.findByPk(req.body.genre_id);
       if (!genre) {
-        return res.status(400).json({ status: 'fail', message: 'Invalid genre Id.' });
+        return next(new AppError(400, 'fail', 'Invalid genre Id.'));
       }
     }
 
