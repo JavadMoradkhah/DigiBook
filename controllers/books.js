@@ -10,7 +10,7 @@ exports.findBook = async (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
 
-    const book = await Book.findByPk(id);
+    const book = await Book.findByPk(id, { include: [{ model: Genre, as: 'genre' }] });
 
     if (!book) {
       return next(new AppError(404, 'fail', 'The book not found with the given id.'));
@@ -26,7 +26,10 @@ exports.findBook = async (req, res, next) => {
 
 exports.getAllBooks = async (req, res, next) => {
   try {
-    const books = await Book.findAll({ order: [['title']] });
+    const books = await Book.findAll({
+      order: [['title']],
+      include: [{ model: Genre, as: 'genre' }],
+    });
 
     res.status(200).json({ status: 'success', data: { books } });
   } catch (error) {
