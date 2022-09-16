@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const homeRoute = require('./routes/home');
 const authRoutes = require('./routes/auth');
@@ -11,6 +12,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
+
+app.use(express.static(path.resolve(process.cwd(), './public')));
 
 app.use('/api/', homeRoute);
 app.use('/api/auth', authRoutes);
