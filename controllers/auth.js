@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { ValidationError } = require('sequelize');
 const User = require('../models/User');
 const { UserSchema, LoginSchema } = require('../schemas/User');
 
@@ -30,10 +29,7 @@ exports.register = async (req, res, next) => {
 
     res.status(201).json({ status: 'success', data: { token, user } });
   } catch (error) {
-    if (error instanceof ValidationError) {
-      return res.status(400).json({ status: 'fail', message: 'Please try another email.' });
-    }
-    res.status(400).json({ status: 'fail', message: error });
+    next(error);
   }
 };
 
@@ -61,7 +57,6 @@ exports.login = async (req, res, next) => {
 
     res.status(200).json({ status: 'success', data: { token, user } });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ status: 'fail', message: error });
+    next(error);
   }
 };

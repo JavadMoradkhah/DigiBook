@@ -3,6 +3,8 @@ const express = require('express');
 const homeRoute = require('./routes/home');
 const authRoutes = require('./routes/auth');
 const genreRoutes = require('./routes/genres');
+const bookRoutes = require('./routes/books');
+const errorMiddleware = require('./middleware/error');
 const database = require('./startup/database');
 
 const app = express();
@@ -13,6 +15,9 @@ app.use(express.json());
 app.use('/api/', homeRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api/genres', genreRoutes);
+app.use('/api/books', bookRoutes);
+
+app.use(errorMiddleware);
 
 database.sync();
 
