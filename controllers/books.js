@@ -1,5 +1,6 @@
 // const { ValidationError } = require('sequelize');
 const Book = require('../models/Book');
+const Genre = require('../models/Genre');
 const { BookSchema, BookUpdateSchema } = require('../schemas/Book');
 
 exports.findBook = async (req, res, next) => {
@@ -9,7 +10,9 @@ exports.findBook = async (req, res, next) => {
     const book = await Book.findByPk(id);
 
     if (!book) {
-      return res.status(404).json({ status: 'fail', message: 'The book not found with the given id!' });
+      return res
+        .status(404)
+        .json({ status: 'fail', message: 'The book not found with the given id!' });
     }
 
     req.book = book;
@@ -45,6 +48,11 @@ exports.createBook = async (req, res, next) => {
       return res.status(400).json({ status: 'fail', message: validation.error.message });
     }
 
+    const genre = await Genre.findByPk(req.body.genre_id);
+    if (!genre) {
+      return res.status(400).json({ status: 'fail', message: 'Invalid genre Id.' });
+    }
+
     const book = await Book.create(req.body);
 
     res.status(200).json({ status: 'success', data: { book } });
@@ -61,6 +69,13 @@ exports.updateBook = async (req, res, next) => {
     }
 
     let { book } = req;
+
+    if (req.body.genre_id) {
+      const genre = await Genre.findByPk(req.body.genre_id);
+      if (!genre) {
+        return res.status(400).json({ status: 'fail', message: 'Invalid genre Id.' });
+      }
+    }
 
     Object.assign(book, req.body);
 

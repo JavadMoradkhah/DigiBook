@@ -43,6 +43,6 @@ const Book = database.define(
   { indexes: [{ unique: true, fields: ['title'] }, { fields: ['publisher'] }], underscored: true }
 );
 
-Book.belongsTo(Genre);
+Book.belongsTo(Genre, { foreignKey: 'genre_id' });
 
 module.exports = Book;
