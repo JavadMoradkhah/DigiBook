@@ -1,7 +1,10 @@
 // const { ValidationError } = require('sequelize');
 const Book = require('../models/Book');
 const Genre = require('../models/Genre');
-const { BookSchema, BookUpdateSchema } = require('../schemas/Book');
+const { BookUpdateSchema } = require('../schemas/Book');
+const upload = require('../config/storage');
+
+exports.uploadBookThumbnail = upload.single('thumbnail_image');
 
 exports.findBook = async (req, res, next) => {
   try {
@@ -43,15 +46,15 @@ exports.getBookById = async (req, res, next) => {
 
 exports.createBook = async (req, res, next) => {
   try {
-    const validation = BookSchema.validate(req.body);
-    if (validation.error) {
-      return res.status(400).json({ status: 'fail', message: validation.error.message });
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ status: 'fail', message: 'Please upload the book thumbnail image.' });
     }
 
-    const genre = await Genre.findByPk(req.body.genre_id);
-    if (!genre) {
-      return res.status(400).json({ status: 'fail', message: 'Invalid genre Id.' });
-    }
+    req.body.thumbnail_image = `uploads/${req.file.filename}`;
+
+    console.log('thumbnail_image:', req.body.thumbnail_image);
 
     const book = await Book.create(req.body);
 

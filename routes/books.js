@@ -1,9 +1,19 @@
+// const multer = require('multer')().none();
 const router = require('express').Router();
-const { findBook, getAllBooks, getBookById, createBook, updateBook, deleteBook } = require('../controllers/books');
+const validateBook = require('../middleware/validators/book');
+const {
+  uploadBookThumbnail,
+  findBook,
+  getAllBooks,
+  getBookById,
+  createBook,
+  updateBook,
+  deleteBook,
+} = require('../controllers/books');
 
 router.param('id', findBook);
 
-router.route('/').get(getAllBooks).post(createBook);
+router.route('/').get(getAllBooks).post(uploadBookThumbnail, validateBook, createBook);
 
 router.route('/:id').get(getBookById).patch(updateBook).delete(deleteBook);
 
