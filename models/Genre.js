@@ -10,12 +10,12 @@ const Genre = database.define(
       allowNull: false,
       autoIncrement: true,
     },
-    genre_name: {
+    name: {
       type: DataTypes.STRING(50),
       allowNull: false,
     },
   },
-  { indexes: [{ unique: true, fields: ['genre_name'] }], underscored: true }
+  { indexes: [{ unique: true, fields: ['name'] }], underscored: true }
 );
 
 module.exports = Genre;

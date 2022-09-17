@@ -22,7 +22,7 @@ exports.findGenre = async (req, res, next) => {
 
 exports.getAllGenres = async (req, res, next) => {
   try {
-    const genres = await Genre.findAll({ order: [['genre_name']] });
+    const genres = await Genre.findAll({ order: [['name']] });
 
     res.status(200).json({ status: 'success', data: { genres } });
   } catch (error) {
@@ -62,7 +62,7 @@ exports.updateGenre = async (req, res, next) => {
 
     let { genre } = req;
 
-    genre.genreName = req.body.genreName;
+    genre.name = req.body.name;
 
     genre = await genre.save();
 
