@@ -7,12 +7,12 @@ const schema = {
 };
 
 const UserSchema = Joi.object({
-  firstName: Joi.string()
+  first_name: Joi.string()
     .pattern(/^[A-Z|a-z|\s]+$/)
     .min(2)
     .max(50)
     .required(),
-  lastName: Joi.string()
+  last_name: Joi.string()
     .pattern(/^[A-Z|a-z|\s]+$/)
     .min(2)
     .max(50)
