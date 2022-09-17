@@ -27,6 +27,10 @@ const Book = database.define(
       type: DataTypes.STRING(50),
       allowNull: false,
     },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     publisher: {
       type: DataTypes.STRING(50),
       allowNull: true,
