@@ -70,7 +70,12 @@ exports.createBook = async (req, res, next) => {
 
     req.body.thumbnail_image = `uploads/${req.file.filename}`;
 
-    const book = await Book.create(req.body);
+    let book = await Book.findOne({ where: { title: req.body.title } });
+    if (book) {
+      return next(new AppError(400, 'fail', 'The book with the given title already exists.'));
+    }
+
+    book = await Book.create(req.body);
 
     res.status(200).json({ status: 'success', data: { book } });
   } catch (error) {
