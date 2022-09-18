@@ -28,8 +28,6 @@ app.use('/api/addresses', addressRoutes);
 
 app.use(errorMiddleware);
 
-database.sync();
-
 app.listen(port, () => {
   console.log(`Server is running: http://localhost:${port}/api/`);
 });
