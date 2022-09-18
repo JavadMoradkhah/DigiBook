@@ -5,6 +5,7 @@ const homeRoute = require('./routes/home');
 const authRoutes = require('./routes/auth');
 const genreRoutes = require('./routes/genres');
 const bookRoutes = require('./routes/books');
+const reviewRoutes = require('./routes/reviews');
 const errorMiddleware = require('./middleware/error');
 const database = require('./startup/database');
 
@@ -19,6 +20,7 @@ app.use('/api/', homeRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api/genres', genreRoutes);
 app.use('/api/books', bookRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 app.use(errorMiddleware);
 
