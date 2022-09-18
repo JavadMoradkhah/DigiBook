@@ -18,7 +18,7 @@ const Order = database.define(
       defaultValue: 'PENDING',
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(3, 2),
       allowNull: false,
     },
     quantity: {

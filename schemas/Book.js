@@ -11,7 +11,7 @@ const schema = {
     .pattern(/^[A-Z|a-z|\s]+$/)
     .min(3)
     .max(50),
-  price: Joi.number().integer().min(0),
+  price: Joi.number().min(0),
   quantity: Joi.number().integer().min(0).max(1_000_000),
   publisher: Joi.string()
     .pattern(/^[A-Z|a-z|\s]+$/)

@@ -29,7 +29,7 @@ const Book = database.define(
       allowNull: false,
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(3, 2),
       allowNull: false,
     },
     quantity: {
