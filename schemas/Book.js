@@ -12,6 +12,7 @@ const schema = {
     .min(3)
     .max(50),
   price: Joi.number().integer().min(0),
+  quantity: Joi.number().integer().min(0).max(1_000_000),
   publisher: Joi.string()
     .pattern(/^[A-Z|a-z|\s]+$/)
     .min(3)
@@ -29,6 +30,7 @@ exports.BookSchema = Joi.object({
   description: schema.description.required(),
   author: schema.author.required(),
   price: schema.price.required(),
+  quantity: schema.quantity.required(),
   publisher: schema.publisher,
   copyright_holder: schema.copyright_holder,
   copyright_date: schema.copyright_date,
