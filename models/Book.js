@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const database = require('../startup/database');
 const Genre = require('./Genre');
+const Review = require('./Review');
 
 const Book = database.define(
   'Book',
@@ -48,5 +49,7 @@ const Book = database.define(
 );
 
 Book.belongsTo(Genre, { as: 'genre', foreignKey: 'genre_id' });
+
+Book.hasMany(Review, { as: 'reviews', foreignKey: 'book_id' });
 
 module.exports = Book;

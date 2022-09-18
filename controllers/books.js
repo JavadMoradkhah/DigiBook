@@ -1,6 +1,8 @@
 const AppError = require('../utils/AppError');
+const database = require('../startup/database');
 const Book = require('../models/Book');
 const Genre = require('../models/Genre');
+const Review = require('../models/Review');
 const { BookUpdateSchema } = require('../schemas/Book');
 const upload = require('../config/storage');
 
@@ -10,7 +12,17 @@ exports.findBook = async (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
 
-    const book = await Book.findByPk(id, { include: [{ model: Genre, as: 'genre' }] });
+    const ratingSubQuery = `(
+      SELECT AVG(reviews.rating) FROM reviews WHERE reviews.book_id = Book.id
+    )`;
+
+    const book = await Book.findByPk(id, {
+      include: [
+        { model: Genre, as: 'genre' },
+        { model: Review, as: 'reviews' },
+      ],
+      attributes: { exclude: 'genre_id', include: [[database.literal(ratingSubQuery), 'rating']] },
+    });
 
     if (!book) {
       return next(new AppError(404, 'fail', 'The book not found with the given id.'));
@@ -26,9 +38,14 @@ exports.findBook = async (req, res, next) => {
 
 exports.getAllBooks = async (req, res, next) => {
   try {
+    const ratingSubQuery = `(
+      SELECT AVG(reviews.rating) FROM reviews WHERE reviews.book_id = Book.id
+    )`;
+
     const books = await Book.findAll({
       order: [['title']],
       include: [{ model: Genre, as: 'genre' }],
+      attributes: { exclude: 'genre_id', include: [[database.literal(ratingSubQuery), 'rating']] },
     });
 
     res.status(200).json({ status: 'success', data: { books } });
