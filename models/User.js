@@ -4,17 +4,17 @@ const database = require('../startup/database');
 const User = database.define(
   'User',
   {
-    userId: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
       autoIncrement: true,
     },
-    firstName: {
+    first_name: {
       type: DataTypes.STRING(50),
       allowNull: false,
     },
-    lastName: {
+    last_name: {
       type: DataTypes.STRING(50),
       allowNull: false,
     },
@@ -27,7 +27,7 @@ const User = database.define(
       allowNull: false,
     },
   },
-  { indexes: [{ unique: true, fields: ['email'] }] }
+  { indexes: [{ unique: true, fields: ['email'] }], underscored: true }
 );
 
 module.exports = User;
