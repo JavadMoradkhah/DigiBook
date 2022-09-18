@@ -18,11 +18,11 @@ const Order = database.define(
       defaultValue: 'PENDING',
     },
     price: {
-      type: DataTypes.DECIMAL(3, 2),
+      type: DataTypes.DECIMAL(9, 2),
       allowNull: false,
     },
     discount_price: {
-      type: DataTypes.DECIMAL(3, 2),
+      type: DataTypes.DECIMAL(9, 2),
       allowNull: true,
       defaultValue: 0,
     },

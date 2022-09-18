@@ -21,14 +21,17 @@ exports.findBook = async (req, res, next) => {
         { model: Genre, as: 'genre' },
         { model: Review, as: 'reviews' },
       ],
-      attributes: { exclude: 'genre_id', include: [[database.literal(ratingSubQuery), 'rating']] },
+      attributes: {
+        exclude: 'genre_id',
+        include: ['id', [database.literal(ratingSubQuery), 'rating']],
+      },
     });
 
     if (!book) {
       return next(new AppError(404, 'fail', 'The book not found with the given id.'));
     }
 
-    req.book = book;
+    req.book = book.toJSON();
 
     next();
   } catch (error) {
@@ -131,7 +134,7 @@ exports.updateBook = async (req, res, next) => {
 
 exports.deleteBook = async (req, res, next) => {
   try {
-    await req.book.destroy();
+    await Book.destroy({ where: { id: req.book.id } });
 
     res.status(204).json({ status: 'success', data: { book: null } });
   } catch (error) {
