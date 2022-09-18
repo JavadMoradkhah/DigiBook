@@ -75,6 +75,18 @@ exports.createBook = async (req, res, next) => {
       return next(new AppError(400, 'fail', 'The book with the given title already exists.'));
     }
 
+    let { discount_price, price } = req.body;
+
+    // Converting string to number
+    discount_price *= 1;
+    price *= 1;
+
+    if (discount_price && discount_price >= price) {
+      return next(
+        new AppError(400, 'fail', 'The book discount price must be less than its original price')
+      );
+    }
+
     book = await Book.create(req.body);
 
     res.status(200).json({ status: 'success', data: { book } });
@@ -97,6 +109,14 @@ exports.updateBook = async (req, res, next) => {
       if (!genre) {
         return next(new AppError(400, 'fail', 'Invalid genre Id.'));
       }
+    }
+
+    const { discount_price } = req.body;
+
+    if (discount_price && discount_price >= book.price) {
+      return next(
+        new AppError(400, 'fail', 'The book discount price must be less than its original price')
+      );
     }
 
     Object.assign(book, req.body);

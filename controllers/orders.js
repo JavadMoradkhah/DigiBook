@@ -115,8 +115,9 @@ exports.createOrder = async (req, res, next) => {
       );
     }
 
-    // 5- Setting order price according to book price
+    // 5- Setting order price and discount_price according to book price
     req.body.price = book.price;
+    req.body.discount_price = book.discount_price;
 
     // 6- Adding order to the database
     order = await Order.create(req.body);

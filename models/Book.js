@@ -32,6 +32,11 @@ const Book = database.define(
       type: DataTypes.DECIMAL(3, 2),
       allowNull: false,
     },
+    discount_price: {
+      type: DataTypes.DECIMAL(3, 2),
+      allowNull: true,
+      defaultValue: 0,
+    },
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
