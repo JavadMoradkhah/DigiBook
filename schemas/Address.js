@@ -10,7 +10,7 @@ const schema = {
   additional_info: Joi.string().max(500),
 };
 
-exports.AddressSchema = {
+exports.AddressSchema = Joi.object({
   country: schema.country.required(),
   state: schema.state.required(),
   city: schema.city.required(),
@@ -18,6 +18,6 @@ exports.AddressSchema = {
   zipcode: schema.zipcode.required(),
   telephone: schema.telephone.required(),
   additional_info: schema.additional_info,
-};
+});
 
 exports.AddressUpdateSchema = Joi.object(schema);
