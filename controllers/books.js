@@ -48,7 +48,10 @@ exports.getAllBooks = async (req, res, next) => {
     const books = await Book.findAll({
       order: [['title']],
       include: [{ model: Genre, as: 'genre' }],
-      attributes: { exclude: 'genre_id', include: [[database.literal(ratingSubQuery), 'rating']] },
+      attributes: {
+        exclude: 'genre_id',
+        include: ['id', [database.literal(ratingSubQuery), 'rating']],
+      },
     });
 
     res.status(200).json({ status: 'success', data: { books } });

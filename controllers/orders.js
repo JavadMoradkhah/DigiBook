@@ -3,6 +3,7 @@ const AppError = require('../utils/AppError');
 const Order = require('../models/Order');
 const Book = require('../models/Book');
 const User = require('../models/User');
+const Address = require('../models/Address');
 const { OrderSchema, OrderUpdateSchema } = require('../schemas/Order');
 
 // Accessibility: Admins & Authenticated Users
@@ -14,9 +15,10 @@ exports.findOrder = async (req, res, next) => {
       include: [
         { model: User, as: 'user', attributes: { exclude: 'password' } },
         { model: Book, as: 'book', attributes: ['id', 'title', 'thumbnail_image', 'price'] },
+        { model: Address, as: 'address', attributes: ['id', 'country', 'state', 'city', 'street'] },
       ],
       attributes: {
-        exclude: ['user_id', 'book_id'],
+        exclude: ['user_id', 'book_id', 'address_id'],
       },
     });
 
@@ -50,9 +52,10 @@ exports.getUserOrders = async (req, res, next) => {
       where: { user_id: req.user.id },
       include: [
         { model: Book, as: 'book', attributes: ['id', 'title', 'thumbnail_image', 'price'] },
+        { model: Address, as: 'address', attributes: ['id', 'country', 'state', 'city', 'street'] },
       ],
       attributes: {
-        exclude: ['user_id', 'book_id'],
+        exclude: ['user_id', 'book_id', 'address_id'],
       },
       order: [['created_at', 'DESC']],
     });
@@ -89,7 +92,13 @@ exports.createOrder = async (req, res, next) => {
       return next(new AppError(400, 'fail', 'The given book id is invalid.'));
     }
 
-    // 3- Checking whether the user has ordered the book or not
+    // 3- Checking whether the book id is valid or not
+    const address = await Address.findByPk(req.body.address_id);
+    if (!address) {
+      return next(new AppError(400, 'fail', 'The given address id is invalid.'));
+    }
+
+    // 4- Checking whether the user has ordered the book or not
     let order = await Order.findOne({
       where: {
         [Op.and]: [
@@ -104,7 +113,7 @@ exports.createOrder = async (req, res, next) => {
       return next(new AppError(400, 'fail', 'You have already placed this order.'));
     }
 
-    // 4- Checking whether order quantity is less than or equal to book quantity
+    // 5- Checking whether order quantity is less than or equal to book quantity
     if (req.body.quantity > book.quantity) {
       return next(
         new AppError(
@@ -115,14 +124,14 @@ exports.createOrder = async (req, res, next) => {
       );
     }
 
-    // 5- Setting order price and discount_price according to book price
+    // 6- Setting order price and discount_price according to book price
     req.body.price = book.price;
     req.body.discount_price = book.discount_price;
 
-    // 6- Adding order to the database
+    // 7- Adding order to the database
     order = await Order.create(req.body);
 
-    // 7- Updating the book quantity in stock
+    // 8- Updating the book quantity in stock
     book.quantity -= req.body.quantity;
     await book.save();
 

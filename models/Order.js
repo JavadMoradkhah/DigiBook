@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const database = require('../startup/database');
 const Book = require('./Book');
 const User = require('./User');
+const Address = require('./Address');
 
 const Order = database.define(
   'Order',
@@ -43,5 +44,7 @@ const Order = database.define(
 Order.belongsTo(Book, { as: 'book', foreignKey: 'book_id' });
 
 Order.belongsTo(User, { as: 'user', foreignKey: 'user_id' });
+
+Order.belongsTo(Address, { as: 'address', foreignKey: 'address_id' });
 
 module.exports = Order;
