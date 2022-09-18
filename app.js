@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const genreRoutes = require('./routes/genres');
 const bookRoutes = require('./routes/books');
 const reviewRoutes = require('./routes/reviews');
+const orderRoutes = require('./routes/orders');
 const errorMiddleware = require('./middleware/error');
 const database = require('./startup/database');
 
@@ -21,6 +22,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/genres', genreRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/orders', orderRoutes);
 
 app.use(errorMiddleware);
 
