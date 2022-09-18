@@ -26,6 +26,10 @@ const User = database.define(
       type: DataTypes.STRING(1000),
       allowNull: false,
     },
+    is_admin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   { indexes: [{ unique: true, fields: ['email'] }], underscored: true }
 );

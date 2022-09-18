@@ -41,11 +41,13 @@ exports.login = async (req, res, next) => {
       return next(new AppError(400, 'fail', validation.error.message));
     }
 
-    const user = await User.findOne({ where: { email: req.body.email }, raw: true });
+    let user = await User.findOne({ where: { email: req.body.email } });
 
     if (!user) {
       return next(new AppError(400, 'fail', 'The email or password is invalid!'));
     }
+
+    user = user.toJSON();
 
     const passwordMatch = await bcrypt.compare(req.body.password, user.password);
     if (!passwordMatch) {
