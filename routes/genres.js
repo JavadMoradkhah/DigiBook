@@ -8,13 +8,19 @@ const {
   updateGenre,
   deleteGenre,
 } = require('../controllers/genres');
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 
 router.get('/genre-stats', getGenreStats);
 
-router.param('id', findGenre);
+router.get('/', getAllGenres);
 
-router.route('/').get(getAllGenres).post(createGenre);
+router.get('/:id', findGenre, getGenreById);
 
-router.route('/:id').get(getGenreById).patch(updateGenre).delete(deleteGenre);
+router.post('/', auth, admin, createGenre);
+
+router.patch('/:id', auth, admin, findGenre, updateGenre);
+
+router.delete('/:id', auth, admin, findGenre, deleteGenre);
 
 module.exports = router;

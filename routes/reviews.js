@@ -2,10 +2,10 @@ const router = require('express').Router();
 const { findReview, createReview, updateReview, deleteReview } = require('../controllers/reviews');
 const auth = require('../middleware/auth');
 
-router.param('id', findReview);
+router.post('/', auth, createReview);
 
-router.route('/').post(auth, createReview);
+router.patch('/:id', auth, findReview, updateReview);
 
-router.route('/:id').patch(auth, updateReview).delete(auth, deleteReview);
+router.delete('/:id', auth, findReview, deleteReview);
 
 module.exports = router;

@@ -10,11 +10,17 @@ const {
   updateBook,
   deleteBook,
 } = require('../controllers/books');
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 
-router.param('id', findBook);
+router.get('/', getAllBooks);
 
-router.route('/').get(getAllBooks).post(uploadBookThumbnail, validateBook, createBook);
+router.get('/:id', findBook, getBookById);
 
-router.route('/:id').get(getBookById).patch(updateBook).delete(deleteBook);
+router.post('/', auth, admin, uploadBookThumbnail, validateBook, createBook);
+
+router.patch('/:id', auth, admin, findBook, updateBook);
+
+router.delete('/:id', auth, admin, findBook, deleteBook);
 
 module.exports = router;
