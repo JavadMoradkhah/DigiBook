@@ -3,10 +3,13 @@ const {
   findGenre,
   getAllGenres,
   getGenreById,
+  getGenreStats,
   createGenre,
   updateGenre,
   deleteGenre,
 } = require('../controllers/genres');
+
+router.get('/genre-stats', getGenreStats);
 
 router.param('id', findGenre);
 

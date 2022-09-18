@@ -1,5 +1,7 @@
 const AppError = require('../utils/AppError');
 const Genre = require('../models/Genre');
+// const Book = require('../models/Book');
+const database = require('../startup/database');
 const { GenreSchema } = require('../schemas/Genre');
 
 exports.findGenre = async (req, res, next) => {
@@ -33,6 +35,23 @@ exports.getAllGenres = async (req, res, next) => {
 exports.getGenreById = async (req, res, next) => {
   try {
     res.status(200).json({ status: 'success', data: { genre: req.genre } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getGenreStats = async (req, res, next) => {
+  try {
+    const subQuery = '(SELECT COUNT(*) FROM books book WHERE book.genre_id = Genre.id)';
+
+    const genres = await Genre.findAll({
+      attributes: {
+        include: [[database.literal(subQuery), 'booksCount']],
+        exclude: ['createdAt', 'updatedAt'],
+      },
+    });
+
+    res.status(200).json({ status: 'success', data: { genres } });
   } catch (error) {
     next(error);
   }
