@@ -46,7 +46,7 @@ exports.getGenreStats = async (req, res, next) => {
 
     const genres = await Genre.findAll({
       attributes: {
-        include: [[database.literal(subQuery), 'booksCount']],
+        include: [[database.literal(subQuery), 'books_count']],
         exclude: ['createdAt', 'updatedAt'],
       },
     });
