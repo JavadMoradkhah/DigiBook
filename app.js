@@ -8,11 +8,14 @@ const bookRoutes = require('./routes/books');
 const reviewRoutes = require('./routes/reviews');
 const orderRoutes = require('./routes/orders');
 const addressRoutes = require('./routes/addresses');
+const viewsRoutes = require('./routes/views');
 const errorMiddleware = require('./middleware/error');
 const database = require('./startup/database');
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+app.set('view engine', 'ejs');
 
 app.use(express.json());
 
@@ -25,6 +28,7 @@ app.use('/api/books', bookRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/addresses', addressRoutes);
+app.use('/', viewsRoutes);
 
 app.use(errorMiddleware);
 
