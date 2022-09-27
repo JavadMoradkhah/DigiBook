@@ -5,6 +5,7 @@ const {
   uploadBookThumbnail,
   findBook,
   getAllBooks,
+  getBestSellingBooks,
   getBookById,
   createBook,
   updateBook,
@@ -14,6 +15,8 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 
 router.get('/', getAllBooks);
+
+router.get('/best-selling', getBestSellingBooks);
 
 router.get('/:id', findBook, getBookById);
 

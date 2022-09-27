@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const AppError = require('../utils/AppError');
 const database = require('../startup/database');
 const Book = require('../models/Book');
@@ -52,6 +53,30 @@ exports.getAllBooks = async (req, res, next) => {
         exclude: 'genre_id',
         include: ['id', [database.literal(ratingSubQuery), 'rating']],
       },
+    });
+
+    res.status(200).json({ status: 'success', data: { books } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getBestSellingBooks = async (req, res, next) => {
+  try {
+    const bookCountSubQuery = `(
+      SELECT COUNT(*) FROM orders WHERE orders.book_id = Book.id
+    )`;
+
+    const limit = parseInt(req.query.limit, 10) || 10;
+
+    const books = await Book.findAll({
+      where: { quantity: { [Op.gt]: 0 } },
+      order: [['sell_count', 'DESC']],
+      attributes: {
+        exclude: ['genre_id', 'description', 'publisher', 'copyright_holder', 'copyright_date'],
+        include: ['id', [database.literal(bookCountSubQuery), 'sell_count']],
+      },
+      limit: limit > 50 ? 50 : limit,
     });
 
     res.status(200).json({ status: 'success', data: { books } });
