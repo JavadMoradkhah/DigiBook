@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const homeRoute = require('./routes/home');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 const genreRoutes = require('./routes/genres');
 const bookRoutes = require('./routes/books');
 const reviewRoutes = require('./routes/reviews');
@@ -23,6 +24,7 @@ app.use(express.static(path.resolve(process.cwd(), './public')));
 
 app.use('/api/', homeRoute);
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/genres', genreRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/reviews', reviewRoutes);
